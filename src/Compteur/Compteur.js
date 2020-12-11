@@ -6,36 +6,32 @@ import { connect } from 'react-redux';
 
 class Compteur extends Component {
 
-    state = {
-        compteur: 0
-    }
-
-    calcul = (action) => {
-
-        if (action === "plus1") {
-            this.setState((statePrec) => { return { compteur: statePrec.compteur + 1 } })
-        }
-        if (action === "moins1") {
-            this.setState((statePrec) => { return { compteur: statePrec.compteur - 1 } })
-        }
-
-
-    }
-
-
     render() {
         return (
             <div className="cont">
                 <div className="blocConmpt">
-                    <Resultat valeur={this.state.compteur} />
+                    <Resultat valeur={this.props.compteur} />
                 </div>
                 <div className="contBtn">
-                    <IncrBtn txt="Incremente" clicked={() => this.calcul("plus1")} />
-                    <IncrBtn txt="Decremente" clicked={() => this.calcul("moins1")} />
+                    <IncrBtn txt="Incremente" clicked={this.props.incremente} />
+                    <IncrBtn txt="Decremente" clicked={this.props.decremente} />
                 </div>
             </div>
         )
     }
 }
 
-export default connect()(Compteur);
+const mapStateToProps = (state) => {
+    return {
+        compteur: state.compteur,
+    }
+}
+
+const mapDispatchToProps = dispatch => {
+    return {
+        incremente: () => dispatch({ type: 'INCREMENTE' }),
+        decremente: () => dispatch({ type: 'DECREMENTE' }),
+    }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Compteur);
